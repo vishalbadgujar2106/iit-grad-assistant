@@ -1,0 +1,16 @@
+# Backend
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+python-dotenv==1.0.1
+
+# Vector store + local embeddings (no external API needed for ingestion)
+chromadb==0.5.5
+sentence-transformers==3.0.1
+
+# LLM
+anthropic==0.34.2
+
+# Evaluation (only needed to run eval/evaluate.py)
+ragas==0.1.16
+datasets==2.21.0

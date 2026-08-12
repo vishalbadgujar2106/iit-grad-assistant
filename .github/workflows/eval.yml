@@ -1,0 +1,32 @@
+name: Evaluate RAG Pipeline
+
+# Runs the RAGAS evaluation suite on every push/PR to main. If accuracy
+# drops below the thresholds set in eval/evaluate.py, this job fails —
+# which you can then set as a required check before merging/deploying.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build vector store
+        run: python ingest.py
+
+      - name: Run evaluation suite
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python eval/evaluate.py

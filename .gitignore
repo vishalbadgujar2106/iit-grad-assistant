@@ -1,0 +1,14 @@
+# Secrets
+.env
+
+# Local vector DB (regenerate with: python ingest.py)
+chroma_db/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+.DS_Store

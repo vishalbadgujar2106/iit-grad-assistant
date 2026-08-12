@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IIT International Grad Student Assistant</title>
+<style>
+  :root {
+    --iit-red: #c8102e;
+    --iit-red-dark: #9c0c24;
+    --ink: #14161a;
+    --panel: #1c1f26;
+    --panel-light: #262a33;
+    --border: #33384277;
+    --text: #eef0f3;
+    --text-dim: #9aa0ac;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 640px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 88vh;
+    max-height: 780px;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--iit-red), var(--iit-red-dark));
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+
+  header h1 {
+    font-size: 15.5px;
+    margin: 0;
+    font-weight: 600;
+  }
+
+  header p {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .disclaimer {
+    background: #2a2210;
+    border-bottom: 1px solid var(--border);
+    color: #e8c775;
+    font-size: 12px;
+    padding: 10px 20px;
+    line-height: 1.5;
+  }
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .msg {
+    max-width: 85%;
+    padding: 11px 14px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+
+  .msg.user {
+    align-self: flex-end;
+    background: var(--iit-red);
+    color: #fff;
+    border-bottom-right-radius: 3px;
+  }
+
+  .msg.bot {
+    align-self: flex-start;
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 3px;
+  }
+
+  .msg.bot h3 {
+    font-size: 14.5px;
+    margin: 0 0 8px;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .msg.bot strong {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .msg.bot ul {
+    margin: 6px 0;
+    padding-left: 20px;
+  }
+
+  .msg.bot li {
+    margin-bottom: 4px;
+  }
+
+  .msg.bot blockquote {
+    margin: 10px 0 0;
+    padding: 8px 12px;
+    border-left: 3px solid var(--iit-red);
+    background: rgba(255,255,255,0.04);
+    border-radius: 4px;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .msg.bot hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 12px 0;
+  }
+
+  .msg.bot p {
+    margin: 0 0 8px;
+  }
+
+  .msg.bot p:last-child {
+    margin-bottom: 0;
+  }
+
+  .msg.bot .sources {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    font-size: 11.5px;
+    color: var(--text-dim);
+  }
+
+  .msg.error {
+    align-self: flex-start;
+    background: #3a1c1c;
+    border: 1px solid #6b2a2a;
+    color: #f3baba;
+  }
+
+  .typing {
+    align-self: flex-start;
+    color: var(--text-dim);
+    font-size: 13px;
+    padding: 4px 14px;
+  }
+
+  form {
+    display: flex;
+    gap: 8px;
+    padding: 14px;
+    border-top: 1px solid var(--border);
+    background: var(--panel);
+  }
+
+  input[type="text"] {
+    flex: 1;
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+  }
+
+  input[type="text"]:focus {
+    border-color: var(--iit-red);
+  }
+
+  button {
+    background: var(--iit-red);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  button:hover { background: var(--iit-red-dark); }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .empty {
+    color: var(--text-dim);
+    font-size: 13px;
+    text-align: center;
+    margin-top: 30px;
+    line-height: 1.6;
+  }
+
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 14px;
+  }
+
+  .suggestions button {
+    background: var(--panel-light);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    font-weight: 400;
+    font-size: 12.5px;
+    padding: 7px 12px;
+    border-radius: 20px;
+  }
+
+  .suggestions button:hover {
+    color: var(--text);
+    border-color: var(--iit-red);
+    background: var(--panel-light);
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <div class="badge">IIT</div>
+    <div>
+      <h1>International Grad Student Assistant</h1>
+      <p>OPT · CPT · Registration · Financial Aid</p>
+    </div>
+  </header>
+
+  <div class="disclaimer">
+    ⚠️ General information only — not official immigration or legal advice. For anything involving your visa status or a real deadline, confirm with the Office of Global Services (OGS) directly.
+  </div>
+
+  <div class="messages" id="messages">
+    <div class="empty" id="emptyState">
+      Ask me anything about OPT, CPT, registration, full-time status, or financial aid at Illinois Tech.
+      <div class="suggestions">
+        <button type="button" class="suggestion">How many credits do I need to stay full-time?</button>
+        <button type="button" class="suggestion">What's the CPT application process?</button>
+        <button type="button" class="suggestion">Can I get financial aid as an international student?</button>
+      </div>
+    </div>
+  </div>
+
+  <form id="chatForm">
+    <input type="text" id="questionInput" placeholder="Type your question..." autocomplete="off" />
+    <button type="submit" id="sendBtn">Send</button>
+  </form>
+</div>
+
+<script>
+  // Point this at your deployed backend URL when you host it.
+  const API_URL = "http://127.0.0.1:8000/chat";
+
+  const form = document.getElementById("chatForm");
+  const input = document.getElementById("questionInput");
+  const messages = document.getElementById("messages");
+  const emptyState = document.getElementById("emptyState");
+  const sendBtn = document.getElementById("sendBtn");
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // Small, purpose-built converter for the subset of markdown the assistant
+  // actually produces (headers, bold, bullet lists, blockquotes, rules).
+  // Not a general markdown library -- keeps the frontend dependency-free.
+  function markdownToHtml(raw) {
+    const escaped = escapeHtml(raw);
+    const lines = escaped.split("\n");
+    let html = "";
+    let inList = false;
+
+    function closeList() {
+      if (inList) { html += "</ul>"; inList = false; }
+    }
+
+    function inline(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+        .replace(/^&gt;\s?/, ""); // strip stray leading blockquote marker if any survives
+    }
+
+    for (let line of lines) {
+      const trimmed = line.trim();
+
+      if (trimmed === "" ) { closeList(); continue; }
+      if (trimmed === "---") { closeList(); html += "<hr>"; continue; }
+
+      if (trimmed.startsWith("## ")) {
+        closeList();
+        html += `<h3>${inline(trimmed.slice(3))}</h3>`;
+        continue;
+      }
+      if (trimmed.startsWith("### ")) {
+        closeList();
+        html += `<h3>${inline(trimmed.slice(4))}</h3>`;
+        continue;
+      }
+      if (trimmed.startsWith("&gt; ")) {
+        closeList();
+        html += `<blockquote>${inline(trimmed.slice(5))}</blockquote>`;
+        continue;
+      }
+      if (/^[-•]\s+/.test(trimmed) || /^\d+\.\s+/.test(trimmed)) {
+        if (!inList) { html += "<ul>"; inList = true; }
+        const content = trimmed.replace(/^[-•]\s+/, "").replace(/^\d+\.\s+/, "");
+        html += `<li>${inline(content)}</li>`;
+        continue;
+      }
+
+      closeList();
+      html += `<p>${inline(trimmed)}</p>`;
+    }
+    closeList();
+    return html;
+  }
+
+  function addMessage(text, role, sources) {
+    if (emptyState) emptyState.remove();
+    const div = document.createElement("div");
+    div.className = "msg " + role;
+
+    if (role === "bot") {
+      div.innerHTML = markdownToHtml(text);
+    } else {
+      div.textContent = text;
+    }
+
+    if (sources && sources.length) {
+      const src = document.createElement("div");
+      src.className = "sources";
+      src.textContent = "Sources: " + sources.join(", ");
+      div.appendChild(src);
+    }
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  function addTyping() {
+    const div = document.createElement("div");
+    div.className = "typing";
+    div.id = "typingIndicator";
+    div.textContent = "Assistant is thinking...";
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeTyping() {
+    const el = document.getElementById("typingIndicator");
+    if (el) el.remove();
+  }
+
+  async function ask(question) {
+    addMessage(question, "user");
+    input.value = "";
+    sendBtn.disabled = true;
+    addTyping();
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }),
+      });
+
+      removeTyping();
+
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        addMessage(
+          "Error: " + (errBody.detail || "Something went wrong talking to the backend."),
+          "error"
+        );
+        return;
+      }
+
+      const data = await res.json();
+      addMessage(data.answer, "bot", data.sources);
+    } catch (err) {
+      removeTyping();
+      addMessage(
+        "Couldn't reach the backend at " + API_URL + ". Is app.py running? (uvicorn app:app --reload)",
+        "error"
+      );
+    } finally {
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = input.value.trim();
+    if (!q) return;
+    ask(q);
+  });
+
+  document.querySelectorAll(".suggestion").forEach((btn) => {
+    btn.addEventListener("click", () => ask(btn.textContent));
+  });
+</script>
+
+</body>
+</html>
