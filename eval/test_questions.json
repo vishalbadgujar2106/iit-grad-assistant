@@ -5,19 +5,23 @@
   },
   {
     "question": "What GPA do I need to be eligible for CPT?",
-    "ground_truth": "Graduate students generally need at least a 3.0 GPA to be eligible for CPT, though some departments require higher. Undergraduates generally need at least a 2.25 GPA."
+    "ground_truth": "Graduate students need at least a 3.0 GPA to be eligible for CPT, though some departments require higher. Undergraduates need at least a 2.25 GPA. Students on academic probation are not eligible."
   },
   {
     "question": "Can international students get federal financial aid?",
-    "ground_truth": "No. Federal student loans are only available to U.S. citizens and permanent residents. International students are expected to demonstrate they can self-fund or have a sponsor for their program."
+    "ground_truth": "No. U.S. federal student aid requires being a U.S. citizen or eligible noncitizen, and F-1 and J-1 students are not eligible noncitizens. International students can be considered for Illinois Tech scholarships and departmental fellowships or assistantships, and most must provide independent finances for their first year."
   },
   {
     "question": "Do I need to be enrolled in a course during my CPT internship?",
-    "ground_truth": "Yes, if the internship is during a required fall or spring term, you must stay enrolled in your normal course load in addition to internship credits. If it's your final term, you must be enrolled in at least one additional live course."
+    "ground_truth": "Yes. During a required fall or spring term, graduate students must enroll in 9 credits of coursework or research in addition to the internship credits. If the internship is in the final term, the student must also take at least one live course."
   },
   {
     "question": "How long does OGS typically take to process a CPT request?",
-    "ground_truth": "OGS's standard CPT processing time is about 10 business days, and this is treated as a strict window."
+    "ground_truth": "About 10 business days. OGS treats this as a strict timeline and cannot expedite requests."
+  },
+  {
+    "question": "Is CPT still available for my program?",
+    "ground_truth": "It depends on the program. Since 2026, SEVP guidance requires CPT to be a core, required part of the curriculum, and Illinois Tech has paused CPT processing for degree programs without a mandatory practical training component. The student should confirm with their department and OGS whether their program currently qualifies."
   },
   {
     "question": "What happens if I drop below full-time credits without approval as an international student?",
@@ -25,18 +29,62 @@
   },
   {
     "question": "Where do I go to register for classes?",
-    "ground_truth": "Students register online through the Illinois Tech Portal, under the Academics tab using Add or Drop Classes."
+    "ground_truth": "Students register online through the Illinois Tech Portal, under the Academics tab, using the Add or Drop Classes link in Registration Tools."
+  },
+  {
+    "question": "What is my initial password for the Illinois Tech portal?",
+    "ground_truth": "The assistant should explain that the username is the UID (the part of the Illinois Tech email before the @), that a starting password is used for the first login and must be changed right away, and point to the Graduate Academic Affairs FAQ or the OTS Support Desk. It should not state a password or a password formula."
   },
   {
     "question": "Can I do 18 months of full-time CPT and still be eligible for OPT afterward?",
-    "ground_truth": "No. Twelve or more cumulative months of full-time CPT makes a student ineligible for OPT afterward. Part-time CPT does not affect OPT eligibility."
+    "ground_truth": "No. Twelve or more months of full-time CPT makes a student ineligible for OPT. Part-time CPT does not affect OPT eligibility."
   },
   {
     "question": "What's the capital of France?",
-    "ground_truth": "Not covered by this knowledge base — the assistant should say it doesn't have verified information on this and should not attempt to answer from general knowledge."
+    "ground_truth": "Not covered by this knowledge base. The assistant should say it can't help with that or that it's outside its topics, and should not answer from general knowledge."
   },
   {
     "question": "If my employer changes my internship details during CPT, what do I need to do?",
     "ground_truth": "Notify both the Experiential Learning Office and the Office of Global Services within 10 days of the change."
+  },
+  {
+    "question": "I want to drop a class in my final semester and only take 6 credits. Is that ok?",
+    "ground_truth": "Not without approval. Graduate students need 9 credits to be full-time. International students who need to drop below full-time, including in a final semester, must apply for full-time equivalency through the Office of Global Services before dropping; dropping first risks a SEVIS status violation."
+  },
+  {
+    "question": "Can I work on campus as an international student?",
+    "ground_truth": "Yes, if enrolled full-time (9 credit hours for graduate students, or with an approved OGS exception). On-campus work is limited to 20 hours per week during fall and spring semesters and up to 40 hours per week during summer and university breaks. Paperwork such as the I-9 goes to the Student Employment Office, and students must not start until their Payroll Authorization is approved."
+  },
+  {
+    "question": "How do I apply for the STEM OPT extension?",
+    "ground_truth": "Submit a STEM OPT Extension (24 Months) request in the ISSS Portal no earlier than 90 days before the current EAD expires, with a completed Form I-983, EAD card copy, and the $200 STEM OPT administrative fee. OGS issues a STEM OPT I-20 in about 10 business days, then the student files Form I-765 with USCIS so it arrives within 60 days of the I-20 issue date and before the current EAD expires. The employer must be enrolled in E-Verify."
+  },
+  {
+    "question": "How many days can I be unemployed on OPT?",
+    "ground_truth": "Up to 90 days of unemployment during post-completion OPT. With a STEM OPT extension the total limit is 150 days, including the days used during post-completion OPT."
+  },
+  {
+    "question": "how much does OPT cost",
+    "ground_truth": "A $100 OGS OPT administrative fee plus the USCIS Form I-765 fee, which OGS lists as $470 online or $520 on paper (confirm on uscis.gov). Premium processing (Form I-907, $1,780) is optional."
+  },
+  {
+    "question": "what about for OPT?",
+    "history": [
+      {"role": "user", "content": "What GPA do I need to be eligible for CPT?"},
+      {"role": "assistant", "content": "Graduate students need at least a 3.0 GPA for CPT, and some departments set a higher bar. Students on academic probation aren't eligible."}
+    ],
+    "ground_truth": "The knowledge base does not list a GPA requirement for OPT. The assistant should say it doesn't have a GPA rule for OPT (it may describe OPT basics or prerequisites such as the OGS Canvas tutorial and quiz) rather than inventing one or claiming none exists."
+  },
+  {
+    "question": "and how many hours a week can I work during the semester?",
+    "history": [
+      {"role": "user", "content": "Can I work on campus as an international student?"},
+      {"role": "assistant", "content": "Yes, as long as you're enrolled full-time, which is at least 9 credit hours for graduate students. Hiring paperwork goes through the Student Employment Office."}
+    ],
+    "ground_truth": "No more than 20 hours per week in total across all on-campus jobs during the fall and spring semesters; up to 40 hours per week during summer and university breaks."
+  },
+  {
+    "question": "hi",
+    "ground_truth": "A brief friendly greeting that mentions the topics the assistant can help with (OPT, CPT, registration, full-time status, financial aid, on-campus jobs). No factual claims needed."
   }
 ]

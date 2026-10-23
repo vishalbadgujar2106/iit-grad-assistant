@@ -1,34 +1,39 @@
-# Course Registration — Illinois Tech Graduate Students
+# Course Registration for Illinois Tech Graduate Students
 
-Source: Office of the Registrar / Graduate Academic Affairs, Illinois Institute of Technology
-Last verified: August 2026
+Source: Graduate Academic Affairs FAQs, https://www.iit.edu/gaa/students/faqs ; OGS check-in, https://www.iit.edu/global-services/incoming-international-students/international-students-check
+Last verified: October 2026
 
 ## How to Register
-Once admitted, register online through the Illinois Tech Portal: log in, go to the Academics tab, and use "Add or Drop Classes" under Registration Tools.
+After you receive your admission letter, register online through the Illinois Tech Portal: log in, open the Academics tab, and use the "Add or Drop Classes" link in the Registration Tools channel.
 
-## Getting Portal Access (First-Time Login)
-- Your UID is the part of your Illinois Tech email before the "@" — sent to you by Admissions after acceptance.
-- Your initial password is your two-digit birth month + two-digit birth day + the last 4 digits of your CWID (e.g., born June 8, CWID ending 1234 → password "06081234"). You'll be prompted to set a new password on first login.
-- International students specifically cannot register for classes until they've arrived on campus and checked in with the International Center — this check-in removes a registration hold.
+## Logging In to the Portal for the First Time
+Your username is your UID, which is the part of your Illinois Tech email address before the "@". You receive a starting password for your first login and will be prompted to create a new password right away. The format of the starting password is explained in the Graduate Academic Affairs FAQ. For login problems, contact the OTS Support Desk at 312-567-3375 or supportdesk@illinoistech.edu.
+
+## New International Students: Check-In with OGS
+New international students must check in with the Office of Global Services (OGS) within 24 hours of arriving in the United States (Fall 2026 guidance). Check-in is done online: log in to the ISSS Portal (isss.iit.edu) with your Illinois Tech (Okta) credentials and submit a "New Student Check-In" request with your visa, I-94 arrival record, local U.S. address, local phone number, and emergency contact information. Until you check in, an International Check-In Hold stays on your account, but it does not prevent you from enrolling in courses or getting a student ID card. OGS processes check-in requests within 5 business days and then removes the hold.
 
 ## Registration Windows
-- Summer/Fall registration opens the prior spring (around April) and stays open through add/drop.
-- Spring registration opens around November and stays open through its add/drop period.
-- Exact semester start dates, add/drop deadlines, and withdrawal deadlines are published each term on the official Academic Calendar — always check that page for the current term rather than assuming last semester's dates repeat.
+- Summer and fall registration begins the previous April and runs through the add/drop period.
+- Spring registration begins in November and runs through its add/drop period.
+- Exact semester start dates, add/drop deadlines, and withdrawal deadlines are published each term on the official Academic Calendar; check it for the current term.
 
 ## Registration Holds
-If you can't register, you likely have a hold. Check the specific hold type on the Registrar's Hold Information page, since different holds (financial, advising, international-check-in, etc.) are cleared by different offices.
+If you can't register, you probably have a hold. Look up the hold type on the Registrar's Hold Information page, then contact the office responsible for that hold. Tuition balances, including unpaid payment plan balances, also lead to registration holds until they're paid.
 
 ## Advising Requirements
-Graduate advising becomes mandatory at specific milestones — generally in a student's first semester (for Plus One students), around 9 earned/enrolled credits for traditional master's students, and around 18 credits for doctoral students. Your advisor's name appears at the bottom of your admission letter; new students can also contact their academic department directly if unsure who their advisor is.
+Graduate advising becomes mandatory at certain milestones: in the first semester of graduate enrollment for Plus One students, at 9 earned or enrolled credits for traditional master's students, and at 18 earned or enrolled credits for doctoral students. You get your advising PIN from your academic adviser or academic unit in your first semester, and you need to schedule an advising appointment before an advising hold is lifted.
 
-## Changing or Dropping Courses
-Adding/dropping/section changes are done in the Illinois Tech Portal directly. Registration or withdrawal isn't official until the Registrar's system processes it — simply stopping attendance or emailing the instructor does NOT count as an official drop or withdrawal.
+## Adding, Dropping, and Withdrawing
+- Add, drop, and section changes are done online through the Portal. For problems, contact the Student Services Center (312-567-3100, onestop@illinoistech.edu).
+- Add/drop deadlines and the tuition refund schedule are in the enrollment guide and Academic Calendar.
+- The last date to withdraw from a class without academic penalty is listed on the current semester's Academic Calendar.
+- To withdraw from the university or take a leave of absence, complete the University Withdrawal or Leave of Absence Form in the Portal under "Graduate Academic Affairs". It needs approval from your academic adviser, academic unit head, and Graduate Academic Affairs. International students must also contact OGS.
 
-## SEVIS / International Student Registration Rule
-International students must register in a way that maintains F-1/J-1 SEVIS status — generally full-time enrollment (see the Full-Time Status doc for exact credit thresholds). International students are also not eligible to register as non-degree, certificate, or part-time students, unlike some domestic students.
+## Registration Rules for International Students
+International students must register in a way that maintains F-1 or J-1 status, which generally means full-time enrollment (see the full-time status notes for credit thresholds). International students are not eligible to register as non-degree, certificate, or part-time students.
 
 ## Who to Contact
-- General registration questions/process issues: Office of the Registrar (registrar@illinoistech.edu) or the Student Services Center (312-567-3100, onestop@illinoistech.edu).
-- Which courses to take / degree planning: your assigned faculty advisor.
-- SEVIS/status implications of your registration: Office of Global Services (OGS).
+- Registration questions: Office of the Registrar, registrar@illinoistech.edu
+- Registration problems in the Portal: Student Services Center, 312-567-3100, onestop@illinoistech.edu
+- Which courses to take and degree planning: your academic adviser
+- How registration affects your F-1 or J-1 status: Office of Global Services, global@illinoistech.edu, 312.567.3680

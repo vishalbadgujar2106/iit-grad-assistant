@@ -2,20 +2,13 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# System deps needed by chromadb/sentence-transformers
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Bake the vector DB into the image at build time so the container is
-# ready to serve immediately (re-run `docker build` after editing data/).
-RUN python ingest.py
-
 EXPOSE 8000
 
+# Pass the API key at runtime, e.g. `docker run --env-file .env ...`;
+# .dockerignore keeps .env out of the image itself.
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

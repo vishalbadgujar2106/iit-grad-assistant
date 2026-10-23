@@ -1,27 +1,32 @@
-# Financial Aid & Tuition — Illinois Tech Graduate Students
+# Financial Aid and Tuition for Illinois Tech Graduate Students
 
-Source: Office of Financial Aid / Graduate Academic Affairs, Illinois Institute of Technology
-Last verified: August 2026
+Source: Office of Financial Aid, https://www.iit.edu/financial-aid/international-students ; Graduate Catalog, Financial Information, https://catalog.iit.edu/graduate/financial-information/ ; Federal Student Aid, 2026-27 FAFSA form, https://studentaid.gov/sites/default/files/2026-27-fafsa-form.pdf ; Student Accounting, https://www.iit.edu/student-accounting/payments/payment-plans
+Last verified: October 2026
 
-## Types of Graduate Funding
-- **Scholarships, fellowships, teaching assistantships (TA), and graduate assistantships (GA)** — awarded by individual academic departments to a limited number of highly qualified students, typically decided at the time of admission. There generally isn't a separate universal application; departments select recipients directly.
-- **Federal student loans** — available to U.S. citizens and permanent residents only. International students are not eligible for U.S. federal aid.
-- International students are expected to demonstrate ability to self-fund (or have a sponsor) for the full cost of their program — this is typically documented via a Financial Affidavit of Support during the admissions process.
+## Federal Financial Aid
+U.S. federal student aid requires being a U.S. citizen or an eligible noncitizen, such as a permanent resident. Students in the U.S. on F-1 or J-1 visas are not eligible noncitizens, so international students on those visas cannot receive U.S. federal student aid. That covers both federal grants and federal student loans.
 
-## Tuition Payment Options
-- **Installment payment plans** — available to both full-time and part-time students through Student Accounting.
-- **Tuition deferral plans** — if your employer offers tuition reimbursement, you may be able to defer payment until you're reimbursed, but this requires an application, a fee, and an employer letter confirming the reimbursement benefit.
+## Paying for Your Program as an International Student
+Illinois Tech offers limited academic scholarship assistance to graduate students. The Graduate Catalog notes that most international students must provide independent finances for their first year of graduate study.
 
-## Where Rates Live
-Actual tuition rates, fees, and any changes approved by the Board of Trustees are posted on the Student Accounting website, not a static handout — always check that page for current-year numbers rather than relying on a remembered figure, since rates are revised periodically.
+## Scholarships
+All undergraduate, transfer, and graduate applicants are automatically considered for Illinois Tech scholarships. The Office of Financial Aid also links to resources for finding outside scholarships.
 
-## Assistantship Notes
-TA/GA positions usually come with a tuition benefit plus a stipend, but they are competitive and limited — most departments award only a small number, concentrated among students admitted with strong research/academic profiles. Don't assume a TA/GA offer is guaranteed just because you're a strong applicant; if funding matters to your decision, ask the department directly during the admissions process.
+## Fellowships and Assistantships
+New students are considered for fellowships, assistantships, and scholarships when they apply for admission, and are notified with their admission decision or shortly after. The Office of Graduate Admission administers a number of fellowships and scholarships, while teaching and research assistantships are handled by each academic department. If funding matters to your decision, ask your department directly about assistantships. TAs and RAs must be enrolled for at least 6 credit hours, and any student paid by the university must complete Form I-9 to show they are eligible to work in the U.S.
+
+## Tuition Payment Plans
+Student Accounting manages billing, payment plans, and refunds.
+- Installment plan: students can enroll themselves through the student portal. The setup fee is $35. For Fall 2026 the installment due dates were July 17, August 17, and September 17, 2026.
+- Registration holds are placed on all tuition accounts with balances, including payment plan balances, before registration opens for the next term, and stay until the balance is paid in full.
+
+## Employer Tuition Deferment
+If your employer reimburses tuition, the Employer Tuition Deferment Plan lets you defer the reimbursable part of fall and spring tuition until three weeks after grades are posted. You need the plan application (submitted electronically), a dated letter on company letterhead stating the reimbursement terms and approximate payment timeframe, and a $55 non-refundable fee. All requirements must be met by the end of the add/drop period, with no exceptions. If your employer doesn't pay, you are personally responsible for the full tuition.
+
+## Where Current Rates Live
+Tuition rates and fees are posted on the Student Accounting website and are revised periodically. Check there for current-year numbers.
 
 ## Who to Contact
-- General financial aid questions / loan info (domestic students): Office of Financial Aid, 312-567-7219.
-- International student funding documentation (Affidavit of Support, etc.): Office of Global Services / International Admissions.
-- Tuition billing, payment plans, deferral: Student Accounting.
-
-## Disclaimer
-Funding amounts, scholarship eligibility, and payment plan terms change by year and by department. This document is a general orientation, not a substitute for checking with your specific department or Student Accounting for numbers that apply to your semester.
+- Scholarships and federal aid: Office of Financial Aid, 312-567-7219
+- Billing, payment plans, and deferment: Student Accounting, through the Student Accounting website or the main university line, 312.567.3000
+- Immigration questions related to funding (F-1 and J-1): Office of Global Services, global@illinoistech.edu, 312.567.3680

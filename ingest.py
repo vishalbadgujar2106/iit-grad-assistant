@@ -1,54 +1,49 @@
 """
 ingest.py
-Reads every .md file in data/, splits it into overlapping chunks,
-embeds each chunk locally (no API key needed for this step), and
-stores everything in a persistent local ChromaDB collection.
+Reads every .md file in data/ and splits it into section-sized chunks that
+the retriever in rag.py searches over.
 
-Run this once at setup, and again any time you add/update files in data/.
+There's no separate build step or vector database anymore: rag.py calls
+build_chunks() once at startup and keeps the index in memory. The whole
+knowledge base is only a few thousand words, so this takes milliseconds and
+keeps the deploy small enough for serverless hosts like Vercel.
 
-Usage:
+Run this directly to inspect how the docs get chunked:
     python ingest.py
 """
 
-import os
 import glob
+import os
 import re
 
-import chromadb
-from chromadb.utils import embedding_functions
+DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 
-DATA_DIR = "data"
-DB_DIR = "chroma_db"
-COLLECTION_NAME = "iit_grad_assistant"
-
-# Chunking config: word-based sliding window. Simple and effective for
-# short, dense FAQ/policy docs like the ones in this project.
+# Word-based sliding window, only used if a single section is unusually long.
 CHUNK_SIZE_WORDS = 180
 CHUNK_OVERLAP_WORDS = 40
 
 
-def load_documents():
-    """Read every markdown file in DATA_DIR, tagged with its source filename."""
+def load_documents(data_dir=DATA_DIR):
+    """Read every markdown file in data_dir, tagged with its source filename."""
     docs = []
-    for path in sorted(glob.glob(os.path.join(DATA_DIR, "*.md"))):
+    for path in sorted(glob.glob(os.path.join(data_dir, "*.md"))):
         with open(path, "r", encoding="utf-8") as f:
             text = f.read()
-        source = os.path.basename(path)
-        docs.append({"source": source, "text": text})
+        docs.append({"source": os.path.basename(path), "text": text})
     return docs
 
 
 def split_into_sections(text):
     """
-    Split a markdown doc on '## ' headers first, so each chunk stays
-    topically coherent (e.g. 'Application Steps' doesn't get merged
-    with 'Fees'). Falls back to the whole doc if there are no headers.
+    Split a markdown doc on '## ' headers so each chunk stays topically
+    coherent (e.g. 'Application Steps' doesn't get merged with 'Fees').
     """
     parts = re.split(r"\n(?=## )", text)
     return [p.strip() for p in parts if p.strip()]
 
 
-def chunk_section(section_text, max_words=CHUNK_SIZE_WORDS, overlap=CHUNK_OVERLAP_WORDS):
+def chunk_section(section_text, max_words=CHUNK_SIZE_WORDS,
+                  overlap=CHUNK_OVERLAP_WORDS):
     """Word-based sliding window chunking, used if a section is still too long."""
     words = section_text.split()
     if len(words) <= max_words:
@@ -58,78 +53,59 @@ def chunk_section(section_text, max_words=CHUNK_SIZE_WORDS, overlap=CHUNK_OVERLA
     start = 0
     while start < len(words):
         end = start + max_words
-        chunk = " ".join(words[start:end])
-        chunks.append(chunk)
+        chunks.append(" ".join(words[start:end]))
         if end >= len(words):
             break
         start = end - overlap
     return chunks
 
 
+def parse_doc_header(intro):
+    """Pull the title and 'Last verified' date out of a doc's intro block."""
+    title = intro.split("\n", 1)[0].lstrip("#").strip()
+    match = re.search(r"^Last verified:\s*([^\n]+)", intro, re.MULTILINE)
+    verified = match.group(1).strip() if match else ""
+    return title, verified
+
+
 def build_chunks(docs):
-    """Turn loaded documents into a flat list of (id, text, metadata) chunks."""
+    """
+    Turn loaded documents into a flat list of chunks. The '# Title / Source /
+    Last verified' intro of each doc is not a chunk of its own (it has no
+    answerable content); instead its title is attached to every section so a
+    chunk like 'Application Steps' still knows it is about CPT, not OPT.
+    """
     all_chunks = []
     for doc in docs:
         sections = split_into_sections(doc["text"])
+        title, verified = "", ""
+        if sections and sections[0].startswith("# "):
+            title, verified = parse_doc_header(sections[0])
+            sections = sections[1:]
+
         for sec_idx, section in enumerate(sections):
-            # Grab the header text (first line) for metadata/debugging.
             header_line = section.split("\n", 1)[0].lstrip("#").strip()
             for chunk_idx, chunk_text in enumerate(chunk_section(section)):
-                chunk_id = f"{doc['source']}::{sec_idx}::{chunk_idx}"
                 all_chunks.append({
-                    "id": chunk_id,
+                    "id": f"{doc['source']}::{sec_idx}::{chunk_idx}",
                     "text": chunk_text,
-                    "metadata": {
-                        "source": doc["source"],
-                        "section": header_line or "intro",
-                    },
+                    "source": doc["source"],
+                    "title": title,
+                    "section": header_line,
+                    "verified": verified,
                 })
     return all_chunks
 
 
 def main():
-    print("Loading documents from data/ ...")
     docs = load_documents()
     if not docs:
-        raise SystemExit(
-            f"No .md files found in '{DATA_DIR}/'. Add your knowledge base "
-            "documents there first."
-        )
-    print(f"  Loaded {len(docs)} document(s): {[d['source'] for d in docs]}")
-
-    print("Chunking documents ...")
+        raise SystemExit(f"No .md files found in '{DATA_DIR}'.")
     chunks = build_chunks(docs)
-    print(f"  Produced {len(chunks)} chunks.")
-
-    print("Loading local embedding model (first run downloads ~90MB, cached after) ...")
-    embedder = embedding_functions.SentenceTransformerEmbeddingFunction(
-        model_name="all-MiniLM-L6-v2"
-    )
-
-    print(f"Writing to local ChromaDB at ./{DB_DIR} ...")
-    client = chromadb.PersistentClient(path=DB_DIR)
-
-    # Fresh start each run so re-ingesting after editing data/ doesn't leave
-    # stale chunks behind.
-    try:
-        client.delete_collection(COLLECTION_NAME)
-    except Exception:
-        pass
-
-    collection = client.create_collection(
-        name=COLLECTION_NAME,
-        embedding_function=embedder,
-        metadata={"hnsw:space": "cosine"},
-    )
-
-    collection.add(
-        ids=[c["id"] for c in chunks],
-        documents=[c["text"] for c in chunks],
-        metadatas=[c["metadata"] for c in chunks],
-    )
-
-    print(f"Done. {collection.count()} chunks embedded and stored in '{COLLECTION_NAME}'.")
-    print("You can now run: uvicorn app:app --reload")
+    print(f"{len(docs)} document(s), {len(chunks)} chunks:\n")
+    for c in chunks:
+        words = len(c["text"].split())
+        print(f"  {c['id']:28} {words:4} words  {c['section']}")
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>IIT International Grad Student Assistant</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c8102e'/%3E%3Ctext x='16' y='21' font-family='Arial' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3EIIT%3C/text%3E%3C/svg%3E" />
 <style>
   :root {
     --iit-red: #c8102e;
@@ -21,7 +22,8 @@
 
   body {
     margin: 0;
-    background: var(--ink);
+    background: linear-gradient(160deg, #181a20 0%, #121318 55%, #0e0f13 100%) fixed;
+    background-color: var(--ink);
     color: var(--text);
     font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
     min-height: 100vh;
@@ -31,17 +33,113 @@
     padding: 24px;
   }
 
+  /* Decorative page background (desktop): soft red glows, thin rings, a
+     faint dot grid that fades out behind the chat, and a faint Chicago
+     skyline along the bottom. Static and low-contrast on purpose so the
+     chat panel stays the focus. */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .backdrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.3px);
+    background-size: 28px 28px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 75% at 50% 50%, transparent 30%, #000 80%);
+    mask-image: radial-gradient(ellipse 70% 75% at 50% 50%, transparent 30%, #000 80%);
+  }
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+  }
+
+  .glow-a {
+    width: 640px;
+    height: 640px;
+    top: -260px;
+    left: -200px;
+    background: radial-gradient(circle, rgba(200, 16, 46, 0.30), transparent 65%);
+  }
+
+  .glow-b {
+    width: 760px;
+    height: 760px;
+    bottom: -320px;
+    right: -240px;
+    background: radial-gradient(circle, rgba(156, 12, 36, 0.28), transparent 65%);
+  }
+
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(200, 16, 46, 0.16);
+  }
+
+  /* A second, fainter concentric line around each ring. */
+  .ring::after {
+    content: "";
+    position: absolute;
+    inset: -56px;
+    border-radius: 50%;
+    border: 1px solid rgba(200, 16, 46, 0.08);
+  }
+
+  .ring-a {
+    width: 520px;
+    height: 520px;
+    top: 50%;
+    left: -300px;
+    transform: translateY(-58%);
+  }
+
+  .ring-b {
+    width: 380px;
+    height: 380px;
+    top: -150px;
+    right: 6%;
+  }
+
+  .skyline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 170px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 120' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' d='M0 120V95h20V80h15v15h15V70h12V60h12v10h12v30h14V85h18V50h6V40h8v10h6v40h17V75h15v27h15V64h7V30h6v-8h4v8h6v34h7v28h17V78h16v18h14V58h8V45h15v13h7v30h18V70h12v30h16V82h14V40h5V18h3V8h2v10h4v-6h2v6h4v22h5v42h15v13h13V66h15v24h16V74h14v24h16V54h12V44h8v10h12v32h17V72h15v28h16V80h14v12h18V76h22v44z'/%3E%3C/svg%3E") repeat-x bottom / 900px 170px;
+    opacity: 0.045;
+    -webkit-mask-image: linear-gradient(to right, #000 0%, transparent 30%, transparent 70%, #000 100%);
+    mask-image: linear-gradient(to right, #000 0%, transparent 30%, transparent 70%, #000 100%);
+  }
+
   .app {
+    position: relative;
+    z-index: 1; /* above the decorative backdrop */
     width: 100%;
-    max-width: 640px;
+    max-width: 780px;
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: 14px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 88vh;
-    max-height: 780px;
+    height: 90vh;
+    max-height: 880px;
+    box-shadow:
+      0 30px 80px rgba(0, 0, 0, 0.55),
+      0 0 0 1px rgba(255, 255, 255, 0.03),
+      0 0 120px rgba(200, 16, 46, 0.10);
+  }
+
+  @media (min-width: 1600px) {
+    .app { max-width: 840px; }
   }
 
   header {
@@ -90,10 +188,11 @@
   .messages {
     flex: 1;
     overflow-y: auto;
-    padding: 18px 20px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
+    position: relative; /* so message offsetTop is measured from here */
   }
 
   .msg {
@@ -101,8 +200,9 @@
     padding: 11px 14px;
     border-radius: var(--radius);
     font-size: 14px;
-    line-height: 1.55;
+    line-height: 1.6;
     white-space: pre-wrap;
+    overflow-wrap: anywhere;
   }
 
   .msg.user {
@@ -113,10 +213,41 @@
   }
 
   .msg.bot {
-    align-self: flex-start;
     background: var(--panel-light);
     border: 1px solid var(--border);
-    border-bottom-left-radius: 3px;
+    white-space: normal; /* bot HTML is built from parsed lines */
+  }
+
+  /* Assistant messages sit in a row with the bot avatar. */
+  .row.bot {
+    align-self: flex-start;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 86%; /* keeps lines a comfortable length in the wider panel */
+  }
+
+  .row.bot .msg {
+    max-width: none;
+    min-width: 0;
+    border-top-left-radius: 3px;
+  }
+
+  .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--iit-red), var(--iit-red-dark));
+    box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.15);
+  }
+
+  .avatar svg {
+    width: 18px;
+    height: 18px;
   }
 
   .msg.bot h3 {
@@ -131,9 +262,14 @@
     font-weight: 700;
   }
 
-  .msg.bot ul {
-    margin: 6px 0;
-    padding-left: 20px;
+  .msg.bot ul,
+  .msg.bot ol {
+    margin: 6px 0 8px;
+    padding-left: 22px;
+  }
+
+  .msg.bot a {
+    color: #ff8a9b;
   }
 
   .msg.bot li {
@@ -165,33 +301,87 @@
   }
 
   .msg.bot .sources {
-    margin-top: 8px;
-    padding-top: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
     border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
     font-size: 11.5px;
     color: var(--text-dim);
   }
 
+  .sources-label {
+    margin-right: 2px;
+  }
+
+  .source-chip {
+    padding: 2px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.05);
+    color: #c9ced8;
+    white-space: nowrap;
+  }
+
   .msg.error {
-    align-self: flex-start;
     background: #3a1c1c;
     border: 1px solid #6b2a2a;
     color: #f3baba;
   }
 
-  .typing {
-    align-self: flex-start;
+  /* Loading state: avatar + animated dots + short status line. */
+  .msg.typing {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--panel-light);
+    border: 1px solid var(--border);
     color: var(--text-dim);
     font-size: 13px;
-    padding: 4px 14px;
+  }
+
+  .dots {
+    display: inline-flex;
+    gap: 4px;
+  }
+
+  .dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--iit-red);
+    animation: dot-bounce 1.2s infinite ease-in-out;
+  }
+
+  .dots span:nth-child(2) { animation-delay: 0.15s; }
+  .dots span:nth-child(3) { animation-delay: 0.3s; }
+
+  @keyframes dot-bounce {
+    0%, 70%, 100% { opacity: 0.3; transform: translateY(0); }
+    35% { opacity: 1; transform: translateY(-3px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dots span { animation: none; opacity: 0.7; }
   }
 
   form {
     display: flex;
     gap: 8px;
-    padding: 14px;
+    padding: 14px 14px 8px;
     border-top: 1px solid var(--border);
     background: var(--panel);
+  }
+
+  .project-note {
+    margin: 0;
+    padding: 0 14px 10px;
+    background: var(--panel);
+    color: var(--text-dim);
+    font-size: 11px;
+    text-align: center;
   }
 
   input[type="text"] {
@@ -224,80 +414,175 @@
   button:hover { background: var(--iit-red-dark); }
   button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .empty {
-    color: var(--text-dim);
-    font-size: 13px;
-    text-align: center;
-    margin-top: 30px;
-    line-height: 1.6;
+  .suggestions {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
   }
 
-  .suggestions {
+  .suggestions-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .suggestions-list {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    justify-content: center;
-    margin-top: 14px;
   }
 
   .suggestions button {
-    background: var(--panel-light);
-    color: var(--text-dim);
+    background: var(--panel);
+    color: var(--text);
     border: 1px solid var(--border);
     font-weight: 400;
     font-size: 12.5px;
+    line-height: 1.35;
     padding: 7px 12px;
     border-radius: 20px;
+    text-align: left;
   }
 
-  .suggestions button:hover {
-    color: var(--text);
+  .suggestions button:hover,
+  .suggestions button:focus-visible {
     border-color: var(--iit-red);
-    background: var(--panel-light);
+    background: rgba(200, 16, 46, 0.12);
+  }
+
+  /* Phones: use the whole screen instead of a floating card. */
+  @media (max-width: 600px) {
+    body { padding: 0; align-items: stretch; }
+    .backdrop { display: none; } /* the chat fills the screen on phones */
+    .app {
+      height: 100vh;
+      height: 100dvh;
+      max-height: none;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    header { padding: 12px 16px; }
+    .disclaimer { padding: 8px 16px; font-size: 11.5px; }
+    .messages { padding: 14px 12px; gap: 14px; }
+    .msg { max-width: 92%; }
+    .row.bot { max-width: 100%; gap: 8px; }
+    .avatar { width: 26px; height: 26px; }
+    .avatar svg { width: 16px; height: 16px; }
+    form { padding: 10px 10px 6px; }
+    .project-note {
+      font-size: 10.5px;
+      padding-bottom: max(8px, env(safe-area-inset-bottom)); /* clear the iPhone home bar */
+    }
+    input[type="text"] { font-size: 16px; } /* stops iOS zooming on focus */
+  }
+
+  /* Very large monitors (1440p and up): a bigger panel and slightly larger
+     text so the chat doesn't shrink into the middle of the screen. Kept last
+     so it overrides the base sizes above. */
+  @media (min-width: 2200px) and (min-height: 1200px) {
+    .app { max-width: 960px; max-height: 1080px; }
+    .msg { font-size: 15px; }
+    header h1 { font-size: 17px; }
+    header p, .disclaimer { font-size: 13px; }
+    .project-note { font-size: 12px; }
+    input[type="text"], button { font-size: 15px; }
   }
 </style>
 </head>
 <body>
 
-<div class="app">
+<div class="backdrop" aria-hidden="true">
+  <span class="glow glow-a"></span>
+  <span class="glow glow-b"></span>
+  <span class="ring ring-a"></span>
+  <span class="ring ring-b"></span>
+  <span class="skyline"></span>
+</div>
+
+<main class="app">
   <header>
     <div class="badge">IIT</div>
     <div>
       <h1>International Grad Student Assistant</h1>
-      <p>OPT · CPT · Registration · Financial Aid</p>
+      <p>OPT · CPT · Campus Jobs · Registration · Financial Aid</p>
     </div>
   </header>
 
   <div class="disclaimer">
-    ⚠️ General information only — not official immigration or legal advice. For anything involving your visa status or a real deadline, confirm with the Office of Global Services (OGS) directly.
+    ⚠️ General information only, not official immigration or legal advice. For anything involving your visa status or a real deadline, confirm with the Office of Global Services (OGS) directly.
   </div>
 
-  <div class="messages" id="messages">
-    <div class="empty" id="emptyState">
-      Ask me anything about OPT, CPT, registration, full-time status, or financial aid at Illinois Tech.
-      <div class="suggestions">
-        <button type="button" class="suggestion">How many credits do I need to stay full-time?</button>
-        <button type="button" class="suggestion">What's the CPT application process?</button>
-        <button type="button" class="suggestion">Can I get financial aid as an international student?</button>
+  <div class="messages" id="messages" role="log" aria-live="polite">
+    <!-- Welcome message; its avatar is added from the template below. -->
+    <div class="row bot" id="welcome">
+      <div class="msg bot">
+        <p>Hi there! Thanks for reaching out to the IIT Grad Assistant.</p>
+        <p>I'm a virtual assistant that can help Illinois Tech graduate students with questions about registration, CPT, OPT, STEM OPT, on-campus jobs, full-time status, financial aid, and other common academic policies.</p>
+        <p>Feel free to ask me anything, and I'll do my best to guide you using the available university information.</p>
+        <div class="suggestions" id="suggestions">
+          <span class="suggestions-label">Not sure where to start? Try one of these:</span>
+          <div class="suggestions-list">
+            <button type="button" class="suggestion">How many credits do I need to stay full-time?</button>
+            <button type="button" class="suggestion">Can I work on campus as an international student?</button>
+            <button type="button" class="suggestion">How do I apply for the STEM OPT extension?</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <form id="chatForm">
-    <input type="text" id="questionInput" placeholder="Type your question..." autocomplete="off" />
+    <input type="text" id="questionInput" placeholder="Ask about OPT, CPT, and more..."
+           autocomplete="off" maxlength="1000" aria-label="Your question" />
     <button type="submit" id="sendBtn">Send</button>
   </form>
-</div>
+
+  <p class="project-note">
+    Independent student project, not an official Illinois Tech service.
+  </p>
+</main>
+
+<!-- Bot avatar reused for every assistant message and the loading state. -->
+<template id="avatarTemplate">
+  <div class="avatar" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="3.2" x2="12" y2="6" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="2.6" r="1.4" fill="#fff"/><rect x="4" y="6.5" width="16" height="13" rx="4.5" fill="#fff"/><circle cx="9.2" cy="12.4" r="1.6" fill="#c8102e"/><circle cx="14.8" cy="12.4" r="1.6" fill="#c8102e"/><path d="M9.6 15.6c1.4 1 3.4 1 4.8 0" stroke="#c8102e" stroke-width="1.4" stroke-linecap="round"/></svg>
+  </div>
+</template>
 
 <script>
-  // Point this at your deployed backend URL when you host it.
-  const API_URL = "http://127.0.0.1:8000/chat";
+  // When the page is served by the backend (http://localhost:8000 or the
+  // deployed site), call /chat on that same host. Opening the file directly
+  // falls back to the local dev server.
+  const API_URL = location.protocol.startsWith("http")
+    ? "/chat"
+    : "http://127.0.0.1:8000/chat";
+  const REQUEST_TIMEOUT_MS = 60000;
+  const HISTORY_LIMIT = 10; // must not exceed MAX_HISTORY_MESSAGES in app.py
 
   const form = document.getElementById("chatForm");
   const input = document.getElementById("questionInput");
   const messages = document.getElementById("messages");
-  const emptyState = document.getElementById("emptyState");
   const sendBtn = document.getElementById("sendBtn");
+  const avatarTemplate = document.getElementById("avatarTemplate");
+
+  // Readable names for the knowledge-base files the API lists as sources.
+  // Files not listed here fall back to a tidied-up file name.
+  const SOURCE_LABELS = {
+    "opt.md": "OPT",
+    "stem_opt.md": "STEM OPT",
+    "cpt.md": "CPT",
+    "on_campus_employment.md": "On-Campus Employment",
+    "full_time_status.md": "Full-Time Status",
+    "registration.md": "Registration",
+    "financial_aid.md": "Financial Aid & Tuition",
+    "contacts.md": "OGS & Campus Contacts",
+  };
+
+  // Completed turns, sent with each question so follow-ups like
+  // "what about OPT?" have context.
+  const history = [];
 
   function escapeHtml(str) {
     const div = document.createElement("div");
@@ -306,128 +591,236 @@
   }
 
   // Small, purpose-built converter for the subset of markdown the assistant
-  // actually produces (headers, bold, bullet lists, blockquotes, rules).
-  // Not a general markdown library -- keeps the frontend dependency-free.
+  // can produce (paragraphs, numbered and bullet lists, bold, italics, links,
+  // and the occasional header or blockquote). The system prompt asks for
+  // near-plain text, so this mostly guards against stray markdown leaking
+  // through as raw symbols. Not a general markdown library -- keeps the
+  // frontend dependency-free.
   function markdownToHtml(raw) {
-    const escaped = escapeHtml(raw);
-    const lines = escaped.split("\n");
+    const lines = escapeHtml(raw).split("\n");
     let html = "";
-    let inList = false;
+    let listType = null; // "ol" | "ul" | null
 
     function closeList() {
-      if (inList) { html += "</ul>"; inList = false; }
+      if (listType) { html += `</${listType}>`; listType = null; }
+    }
+
+    function openList(type) {
+      if (listType !== type) {
+        closeList();
+        html += `<${type}>`;
+        listType = type;
+      }
     }
 
     function inline(text) {
       return text
         .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-        .replace(/^&gt;\s?/, ""); // strip stray leading blockquote marker if any survives
+        .replace(/(^|[^*\w])\*([^*\s][^*]*?)\*(?!\w)/g, "$1<em>$2</em>")
+        .replace(/(^|\W)_([^_\s][^_]*?)_(?!\w)/g, "$1<em>$2</em>")
+        .replace(
+          /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+          '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+        );
     }
 
-    for (let line of lines) {
-      const trimmed = line.trim();
+    for (let i = 0; i < lines.length; i++) {
+      let trimmed = lines[i].trim();
 
-      if (trimmed === "" ) { closeList(); continue; }
-      if (trimmed === "---") { closeList(); html += "<hr>"; continue; }
+      if (trimmed === "") {
+        // A blank line between two items of the same list shouldn't split
+        // it ("1. ... <blank> 2. ..." is still one numbered list).
+        const next = (lines.slice(i + 1).find((l) => l.trim() !== "") || "").trim();
+        const continuesList =
+          (listType === "ol" && /^\d+[.)]\s+/.test(next)) ||
+          (listType === "ul" && /^[-*•]\s+/.test(next));
+        if (!continuesList) closeList();
+        continue;
+      }
+      if (/^(-{3,}|\*{3,}|_{3,})$/.test(trimmed)) { closeList(); continue; }
 
-      if (trimmed.startsWith("## ")) {
+      const heading = trimmed.match(/^#{1,6}\s+(.*)$/);
+      if (heading) {
         closeList();
-        html += `<h3>${inline(trimmed.slice(3))}</h3>`;
+        html += `<h3>${inline(heading[1])}</h3>`;
         continue;
       }
-      if (trimmed.startsWith("### ")) {
-        closeList();
-        html += `<h3>${inline(trimmed.slice(4))}</h3>`;
+
+      let quoted = false;
+      if (trimmed.startsWith("&gt;")) {
+        trimmed = trimmed.replace(/^(&gt;\s?)+/, "");
+        quoted = true;
+        if (!trimmed) continue;
+      }
+
+      const ordered = trimmed.match(/^(\d+)[.)]\s+(.*)$/);
+      if (ordered) {
+        openList("ol");
+        html += `<li value="${ordered[1]}">${inline(ordered[2])}</li>`;
         continue;
       }
-      if (trimmed.startsWith("&gt; ")) {
-        closeList();
-        html += `<blockquote>${inline(trimmed.slice(5))}</blockquote>`;
-        continue;
-      }
-      if (/^[-•]\s+/.test(trimmed) || /^\d+\.\s+/.test(trimmed)) {
-        if (!inList) { html += "<ul>"; inList = true; }
-        const content = trimmed.replace(/^[-•]\s+/, "").replace(/^\d+\.\s+/, "");
-        html += `<li>${inline(content)}</li>`;
+      const bullet = trimmed.match(/^[-*•]\s+(.*)$/);
+      if (bullet) {
+        openList("ul");
+        html += `<li>${inline(bullet[1])}</li>`;
         continue;
       }
 
       closeList();
-      html += `<p>${inline(trimmed)}</p>`;
+      html += quoted
+        ? `<blockquote>${inline(trimmed)}</blockquote>`
+        : `<p>${inline(trimmed)}</p>`;
     }
     closeList();
     return html;
   }
 
-  function addMessage(text, role, sources) {
-    if (emptyState) emptyState.remove();
-    const div = document.createElement("div");
-    div.className = "msg " + role;
-
-    if (role === "bot") {
-      div.innerHTML = markdownToHtml(text);
-    } else {
-      div.textContent = text;
-    }
-
-    if (sources && sources.length) {
-      const src = document.createElement("div");
-      src.className = "sources";
-      src.textContent = "Sources: " + sources.join(", ");
-      div.appendChild(src);
-    }
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
-    return div;
+  function sourceLabel(file) {
+    return SOURCE_LABELS[file] ||
+      file.replace(/\.md$/i, "").replace(/[_-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   }
 
+  function renderSources(sources) {
+    const wrap = document.createElement("div");
+    wrap.className = "sources";
+    const label = document.createElement("span");
+    label.className = "sources-label";
+    label.textContent = "Based on:";
+    wrap.appendChild(label);
+    for (const file of sources) {
+      const chip = document.createElement("span");
+      chip.className = "source-chip";
+      chip.textContent = sourceLabel(file);
+      chip.title = "Knowledge base file: " + file;
+      wrap.appendChild(chip);
+    }
+    return wrap;
+  }
+
+  // Wraps an assistant bubble in a row with the bot avatar.
+  function botRow(bubble) {
+    const row = document.createElement("div");
+    row.className = "row bot";
+    row.appendChild(avatarTemplate.content.cloneNode(true));
+    row.appendChild(bubble);
+    return row;
+  }
+
+  // Short answers: keep the newest message in view. Long answers: show
+  // the start of the answer rather than jumping to its last line.
+  function scrollToMessage(el) {
+    if (el.offsetHeight > messages.clientHeight * 0.7) {
+      messages.scrollTop = el.offsetTop - 12;
+    } else {
+      messages.scrollTop = messages.scrollHeight;
+    }
+  }
+
+  function addMessage(text, role, sources) {
+    const bubble = document.createElement("div");
+    bubble.className = "msg " + role;
+
+    if (role === "bot") {
+      bubble.innerHTML = markdownToHtml(text);
+    } else {
+      bubble.textContent = text;
+    }
+
+    if (sources && sources.length) bubble.appendChild(renderSources(sources));
+
+    const el = role === "user" ? bubble : botRow(bubble);
+    messages.appendChild(el);
+    scrollToMessage(el);
+    return el;
+  }
+
+  let typingTimer = null;
+
   function addTyping() {
-    const div = document.createElement("div");
-    div.className = "typing";
-    div.id = "typingIndicator";
-    div.textContent = "Assistant is thinking...";
-    messages.appendChild(div);
+    const bubble = document.createElement("div");
+    bubble.className = "msg typing";
+    bubble.innerHTML =
+      '<span class="dots" aria-hidden="true"><span></span><span></span><span></span></span>' +
+      '<span class="typing-text">Looking that up for you…</span>';
+    const row = botRow(bubble);
+    row.id = "typingIndicator";
+    row.setAttribute("role", "status");
+    messages.appendChild(row);
     messages.scrollTop = messages.scrollHeight;
+
+    // Most answers take a few seconds; reassure the student if it's slower.
+    typingTimer = setTimeout(() => {
+      const text = row.querySelector(".typing-text");
+      if (text) text.textContent = "Preparing your answer, almost there…";
+    }, 6000);
   }
 
   function removeTyping() {
+    clearTimeout(typingTimer);
     const el = document.getElementById("typingIndicator");
     if (el) el.remove();
   }
 
+  // FastAPI returns `detail` as a string for our own errors but as a list
+  // of objects for request-validation errors (e.g. a question that's too long).
+  function errorMessage(status, body) {
+    if (typeof body.detail === "string") return body.detail;
+    if (Array.isArray(body.detail)) {
+      if (body.detail.some((d) => d.type === "string_too_long")) {
+        return "That message is too long. Please shorten it and try again.";
+      }
+      return "The assistant couldn't read that request. Please try rephrasing.";
+    }
+    return `Something went wrong (error ${status}). Please try again.`;
+  }
+
+  let busy = false;
+
   async function ask(question) {
+    if (busy) return;
+    busy = true;
+    // The starter questions only make sense before the first question.
+    const suggestions = document.getElementById("suggestions");
+    if (suggestions) suggestions.remove();
     addMessage(question, "user");
     input.value = "";
     sendBtn.disabled = true;
     addTyping();
 
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
     try {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ question, history: history.slice(-HISTORY_LIMIT) }),
+        signal: controller.signal,
       });
 
       removeTyping();
 
       if (!res.ok) {
         const errBody = await res.json().catch(() => ({}));
-        addMessage(
-          "Error: " + (errBody.detail || "Something went wrong talking to the backend."),
-          "error"
-        );
+        addMessage(errorMessage(res.status, errBody), "error");
         return;
       }
 
       const data = await res.json();
       addMessage(data.answer, "bot", data.sources);
+      history.push({ role: "user", content: question });
+      history.push({ role: "assistant", content: data.answer });
     } catch (err) {
       removeTyping();
       addMessage(
-        "Couldn't reach the backend at " + API_URL + ". Is app.py running? (uvicorn app:app --reload)",
+        err.name === "AbortError"
+          ? "The assistant took too long to respond. Please try again."
+          : "Couldn't connect to the assistant. Check your internet connection and try again.",
         "error"
       );
     } finally {
+      clearTimeout(timer);
+      busy = false;
       sendBtn.disabled = false;
       input.focus();
     }
@@ -443,6 +836,8 @@
   document.querySelectorAll(".suggestion").forEach((btn) => {
     btn.addEventListener("click", () => ask(btn.textContent));
   });
+
+  document.getElementById("welcome").prepend(avatarTemplate.content.cloneNode(true));
 </script>
 
 </body>

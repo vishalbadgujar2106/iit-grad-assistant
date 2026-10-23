@@ -1,13 +1,10 @@
-name: Evaluate RAG Pipeline
+name: Evaluate answer quality
 
-# Runs the RAGAS evaluation suite on every push/PR to main. If accuracy
-# drops below the thresholds set in eval/evaluate.py, this job fails —
-# which you can then set as a required check before merging/deploying.
+# Runs the full eval (real Claude calls, costs a few cents) only when started
+# by hand from the Actions tab, so ordinary pushes don't spend API credits.
+# Requires an ANTHROPIC_API_KEY repository secret.
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   evaluate:
@@ -22,9 +19,6 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Build vector store
-        run: python ingest.py
 
       - name: Run evaluation suite
         env:
