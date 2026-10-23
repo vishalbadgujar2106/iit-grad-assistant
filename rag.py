@@ -260,7 +260,11 @@ def get_client():
 
     import anthropic
 
-    return anthropic.Anthropic(timeout=45.0, max_retries=2)
+    # Worst case is 2 attempts x 25s = 50s, which stays under the browser's
+    # 60s timeout (frontend/index.html) and the function's maxDuration
+    # (vercel.json), so the server never keeps paying for an answer the
+    # student has already given up on. Typical answers take 4-8s.
+    return anthropic.Anthropic(timeout=25.0, max_retries=1)
 
 
 def generate_answer(question: str, chunks: list, history=None) -> str:

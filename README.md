@@ -132,7 +132,7 @@ Only `ANTHROPIC_API_KEY` is required. The rest are optional environment variable
 | `RATE_LIMIT_PER_MINUTE` | `8` | Questions per minute from one IP |
 | `RATE_LIMIT_PER_DAY` | `60` | Questions per day from one IP |
 | `RATE_LIMIT_GLOBAL_PER_HOUR` | `300` | Questions per hour from everyone combined |
-| `TRUST_PROXY_HEADERS` | `false` | Read the client IP from `X-Forwarded-For`. Turn on only behind a proxy that sets it, otherwise people can fake their IP to dodge the limit |
+| `TRUST_PROXY_HEADERS` | `true` on Vercel, `false` elsewhere | Read the client IP from `X-Forwarded-For`. Vercel overwrites that header with the real visitor IP, so it's trusted there automatically. Elsewhere, turn it on only behind a proxy that sets it, otherwise people can fake their IP to dodge the limit |
 | `ALLOWED_ORIGINS` | none | Comma-separated origins for CORS, only needed if the UI is hosted on a different domain than the API |
 
 The rate limiter keeps its counts in memory. On a single server that's exact; on a serverless host each running instance counts separately, so treat it as a guard rail rather than a hard cap.
@@ -168,7 +168,19 @@ On GitHub, `tests.yml` runs the unit tests on every push. `eval.yml` only runs w
 
 The backend is a small FastAPI app that serves the UI itself, so frontend and backend deploy together. Set `ANTHROPIC_API_KEY` on whatever host you use (and `TRUST_PROXY_HEADERS=true` if it sits behind a proxy that sets `X-Forwarded-For`).
 
-With Docker:
+### Vercel
+
+Vercel picks up `app.py` automatically as a FastAPI app, so there's no build step. Import the GitHub repo in the Vercel dashboard (or run `vercel deploy`), then add `ANTHROPIC_API_KEY` under Project Settings, Environment Variables. The key stays on the server; the browser only ever talks to `/chat`.
+
+The repo includes the few settings it needs:
+
+- `vercel.json` caps each request at 60 seconds. The Claude client is set to give up after about 50 seconds in the worst case, and the browser after 60, so nobody pays for an answer no one is waiting for.
+- `.python-version` pins Python 3.12, the same version CI tests on.
+- `.vercelignore` keeps `.env`, local caches, tests, and docs out of the upload.
+
+On Vercel the rate limiter reads the visitor's IP from `X-Forwarded-For` automatically. Its counts live in each running instance's memory, so for a hard ceiling on cost, also set a monthly spend limit in the Anthropic Console.
+
+### Docker
 
 ```bash
 docker build -t iit-grad-assistant .

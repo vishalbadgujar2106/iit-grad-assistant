@@ -1,0 +1,19 @@
+# Never upload secrets or local state with `vercel deploy`.
+.env
+.env.*
+!.env.example
+.claude/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+chroma_db/
+
+# Not needed at runtime; keeps the function bundle small.
+tests/
+eval/
+docs/
+.github/
+Dockerfile
+.dockerignore

@@ -37,9 +37,13 @@ per_client_limiter = SlidingWindowLimiter([
 global_limiter = SlidingWindowLimiter([
     (int(os.environ.get("RATE_LIMIT_GLOBAL_PER_HOUR", "300")), 3600),
 ])
-# Only trust X-Forwarded-For behind a proxy that sets it (Vercel, a load
-# balancer); otherwise anyone could fake an IP to dodge the limit.
-TRUST_PROXY_HEADERS = os.environ.get("TRUST_PROXY_HEADERS", "").lower() in ("1", "true", "yes")
+# Only trust X-Forwarded-For behind a proxy that sets it; otherwise anyone
+# could fake an IP to dodge the limit. On by default on Vercel (VERCEL=1),
+# which overwrites X-Forwarded-For with the real client IP. Without it, every
+# visitor would share the proxy's address and one rate-limit bucket.
+TRUST_PROXY_HEADERS = os.environ.get(
+    "TRUST_PROXY_HEADERS", "1" if os.environ.get("VERCEL") == "1" else ""
+).lower() in ("1", "true", "yes")
 
 app = FastAPI(
     title="IIT International Grad Student Assistant",

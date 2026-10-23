@@ -142,3 +142,22 @@ def test_blank_questions_do_not_use_up_the_limit(fake_answer):
     for _ in range(20):
         client.post("/chat", json={"question": " "})
     assert client.post("/chat", json={"question": "credits?"}).status_code == 200
+
+
+@pytest.mark.parametrize("env, expected", [
+    ({}, False),                                            # local dev: don't trust headers
+    ({"VERCEL": "1"}, True),                                # Vercel sets the real client IP
+    ({"VERCEL": "1", "TRUST_PROXY_HEADERS": "false"}, False),  # explicit override wins
+    ({"TRUST_PROXY_HEADERS": "true"}, True),                # other proxies, opt in
+])
+def test_proxy_header_trust_defaults(monkeypatch, env, expected):
+    import importlib
+    for key in ("VERCEL", "TRUST_PROXY_HEADERS"):
+        monkeypatch.delenv(key, raising=False)
+    for key, value in env.items():
+        monkeypatch.setenv(key, value)
+    try:
+        assert importlib.reload(app_module).TRUST_PROXY_HEADERS is expected
+    finally:
+        monkeypatch.undo()
+        importlib.reload(app_module)

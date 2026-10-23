@@ -148,3 +148,28 @@ def test_missing_api_key_raises_clear_error(monkeypatch):
     with pytest.raises(RuntimeError, match="ANTHROPIC_API_KEY"):
         rag.get_client()
     rag.get_client.cache_clear()
+
+
+def test_claude_timeout_budget_fits_inside_browser_and_function_limits(monkeypatch):
+    # Worst case (timeout x attempts) must stay under the browser's 60s abort
+    # and vercel.json's maxDuration, or the server keeps paying for answers
+    # nobody is waiting for.
+    import json
+    import pathlib
+    import re
+
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key-not-real")
+    rag.get_client.cache_clear()
+    try:
+        client = rag.get_client()
+        worst_case = client.timeout * (client.max_retries + 1)
+    finally:
+        rag.get_client.cache_clear()
+
+    root = pathlib.Path(__file__).resolve().parent.parent
+    vercel_config = json.loads((root / "vercel.json").read_text())
+    max_duration = vercel_config["functions"]["app.py"]["maxDuration"]
+    frontend = (root / "frontend" / "index.html").read_text(encoding="utf-8")
+    browser_timeout = int(re.search(r"REQUEST_TIMEOUT_MS = (\d+)", frontend).group(1)) / 1000
+
+    assert worst_case < browser_timeout <= max_duration
