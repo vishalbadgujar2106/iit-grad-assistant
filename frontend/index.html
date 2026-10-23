@@ -186,6 +186,19 @@
     font-size: 12px;
     padding: 10px 20px;
     line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* Info icon: the banner's amber (currentColor), slightly softened, and
+     centered on the first line of text at any font size. */
+  .info-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-top: calc((1.5em - 14px) / 2);
+    opacity: 0.85;
   }
 
   .messages {
@@ -514,7 +527,8 @@
   </header>
 
   <div class="disclaimer">
-    ⚠️ General information only, not official immigration or legal advice. For anything involving your visa status or a real deadline, confirm with the Office of Global Services (OGS) directly.
+    <svg class="info-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.25" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.25" fill="currentColor"/></svg>
+    <span class="disclaimer-text">General information only, not official immigration or legal advice. For anything involving your visa status or a real deadline, confirm with the Office of Global Services (OGS) directly.</span>
   </div>
 
   <div class="messages" id="messages" role="log" aria-live="polite">
