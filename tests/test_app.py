@@ -41,7 +41,11 @@ def fake_answer(monkeypatch):
 def test_index_serves_the_chat_ui():
     res = client.get("/")
     assert res.status_code == 200
-    assert "International Grad Student Assistant" in res.text
+    assert "<h1>GradGuide</h1>" in res.text
+    assert "Graduate Student Assistant for Illinois Tech" in res.text
+    # Header badge is the graduation-cap icon, not "IIT" text or a university mark.
+    assert 'class="brand-icon"' in res.text
+    assert '<div class="badge">IIT</div>' not in res.text
     # The UI must always say it's not an official university service.
     assert "not an official Illinois Tech service" in res.text
 

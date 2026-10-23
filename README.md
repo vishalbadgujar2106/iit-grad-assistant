@@ -1,4 +1,4 @@
-# International Grad Student Assistant for Illinois Tech
+# GradGuide: Graduate Student Assistant for Illinois Tech
 
 A chatbot that answers international grad students' questions about OPT, STEM OPT, CPT, on-campus jobs, registration, full-time status, and financial aid at Illinois Tech, using answers pulled from the university's own pages.
 
@@ -65,7 +65,7 @@ Step by step:
 
 ### Why BM25 and not embeddings?
 
-I started with sentence-transformer embeddings in ChromaDB. With a knowledge base this small, keyword search finds the right section just as reliably: the tests in `tests/test_rag.py` check that 16 typical questions get the right section in the top 3. Dropping PyTorch and the vector database took the install from several gigabytes to about 66 MB and the first response from over 40 seconds to around 5. If the knowledge base grows a lot, embeddings would be worth bringing back.
+I started with sentence-transformer embeddings in ChromaDB. With a knowledge base this small, keyword search finds the right section just as reliably: the tests in `tests/test_rag.py` check that 18 typical questions get the right section in the top 3. Dropping PyTorch and the vector database took the install from several gigabytes to about 66 MB and the first response from over 40 seconds to around 5. If the knowledge base grows a lot, embeddings would be worth bringing back.
 
 ## Screenshots
 

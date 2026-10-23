@@ -55,6 +55,10 @@ def test_chunks_skip_title_only_intros_and_keep_doc_metadata():
     ("Where is the OGS office and what are its hours?", "contacts.md", "Location and Hours"),
     ("Does the check-in hold stop me from registering for classes?",
      "registration.md", "Check-In"),
+    ("Can I keep working while my STEM OPT extension is pending?",
+     "stem_opt.md", "Working While Your STEM Application Is Pending"),
+    ("How long after I get my OPT I-20 do I have to file the I-765?",
+     "opt.md", "Timeline and Filing Window"),
 ])
 def test_retrieval_finds_the_right_section_in_top_3(question, source, section):
     top = rag.retrieve(question)[:3]

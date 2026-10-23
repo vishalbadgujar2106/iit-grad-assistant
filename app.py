@@ -1,6 +1,6 @@
 """
 app.py
-FastAPI backend for the International Grad Student Assistant.
+FastAPI backend for GradGuide, a graduate student assistant for Illinois Tech.
 
 Run locally:
     uvicorn app:app --reload
@@ -46,7 +46,7 @@ TRUST_PROXY_HEADERS = os.environ.get(
 ).lower() in ("1", "true", "yes")
 
 app = FastAPI(
-    title="IIT International Grad Student Assistant",
+    title="GradGuide",
     description="RAG-based assistant answering OPT/CPT/registration/financial "
                 "aid questions for Illinois Tech international grad students. "
                 "General information only, not official immigration or legal advice.",
